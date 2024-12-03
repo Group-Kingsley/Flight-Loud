@@ -66,10 +66,7 @@ Flow Navigation (Screen to Screen)
     => None
 
 Wireframes
-[Add picture of your hand sketched wireframes in this section] 
+![image](https://github.com/user-attachments/assets/0d40a64d-4df6-47b8-882c-5de4b16d4e71)
 
 
-
-[BONUS] Digital Wireframes & Mockups
-[BONUS] Interactive Prototype
 
