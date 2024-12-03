@@ -1,10 +1,12 @@
 Milestone 1 - Flight Loud (Unit 7)
+
 Table of Contents
 Overview
 Product Spec
 Wireframes
 Overview
 Description
+
 This is an app that enables users to keep track of fights in their wishlist for when the prices drop.
 
 App Evaluation
