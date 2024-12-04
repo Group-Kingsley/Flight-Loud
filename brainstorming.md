@@ -10,7 +10,10 @@
 **Interactive Story Creator**: 
     An app where users can create and share their own interactive stories. It would include options to create branching stories where readers can choose what happens next, similar to a “choose-your-own-adventure” style.
     
-    
+**Microlearning App**:
+Provides bite-sized lessons (e.g., a daily "5-minute fact").
+**Virtual Study Group**: 
+Matches students with similar goals for study sessions with productivity timers   
 Top 3 contenders are: Brain reminder, Flight Loud, Virtual Workout Buddy.
 
 Critique:
