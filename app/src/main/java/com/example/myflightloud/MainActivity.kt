@@ -38,7 +38,17 @@ class MainActivity : AppCompatActivity() {
                 R.id.menu_search -> fragment = fragment2
                 R.id.menu_list -> fragment = fragment3
             }
+
+            fragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .commit()
+            true
         }
+
+        //default fragment
+        fragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment1)
+            .commit()
 
 
 
