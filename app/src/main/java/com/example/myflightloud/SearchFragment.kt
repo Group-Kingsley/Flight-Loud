@@ -16,6 +16,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import okhttp3.logging.HttpLoggingInterceptor
 
 private val TAG = "SearchFragment"
 class SearchFragment : Fragment() {
@@ -75,9 +76,7 @@ class SearchFragment : Fragment() {
             departDate = departureDate,
             pageNo = 1,
             adults = 1,
-            sort = "BEST",
-            cabinClass = "ECONOMY",
-            children = "0"
+            cabinClass = "ECONOMY"
         ).enqueue(object : Callback<FlightData> {
             override fun onResponse(call: Call<FlightData>, response: Response<FlightData>) {
                 if (response.isSuccessful) {
@@ -127,14 +126,19 @@ private fun getOkHttpClient(): OkHttpClient {
     val interceptor = Interceptor { chain ->
         // Add API Key and Host to the request header
         val request = chain.request().newBuilder()
-            .addHeader("X-RapidAPI-Key", "a029eda3b2mshf5c7bdd4b669d31p11e832jsn80a482e5fee0") // Add your API Key here
+            .addHeader("X-RapidAPI-Key", "a2800f5332msh27c34fbea8745b2p115fccjsn90a290d8fe53") // Add your API Key here
             .addHeader("X-RapidAPI-Host", "booking-com15.p.rapidapi.com")
             .build()
 
         chain.proceed(request) // Proceed with the request
     }
 
+    val loggingInterceptor = HttpLoggingInterceptor()
+    loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+
+
     return OkHttpClient.Builder()
-        .addInterceptor(interceptor) // Add the interceptor
+        .addInterceptor(interceptor)
+        //.addInterceptor(loggingInterceptor) // Add the interceptor FOR http logging.. reallyy neat stuff
         .build()
 }
