@@ -19,6 +19,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import okhttp3.logging.HttpLoggingInterceptor
 
 private val TAG = "SearchFragment"
+
 class SearchFragment : Fragment() {
     private  lateinit var FromTextView: EditText
     private lateinit var ToTextView: EditText
@@ -123,10 +124,11 @@ class SearchFragment : Fragment() {
 }
 
 private fun getOkHttpClient(): OkHttpClient {
+    val apiKey = BuildConfig.API_KEY
     val interceptor = Interceptor { chain ->
         // Add API Key and Host to the request header
         val request = chain.request().newBuilder()
-            .addHeader("X-RapidAPI-Key", "a2800f5332msh27c34fbea8745b2p115fccjsn90a290d8fe53") // Add your API Key here
+            .addHeader("X-RapidAPI-Key", apiKey) // Add your API Key here
             .addHeader("X-RapidAPI-Host", "booking-com15.p.rapidapi.com")
             .build()
 

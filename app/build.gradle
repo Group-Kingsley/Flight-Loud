@@ -3,10 +3,16 @@ plugins {
     alias(libs.plugins.kotlin.android)
 }
 
+//api key set up
+
+def apikeyPropertiesFile = rootProject.file("apikey.properties")
+def apikeyProperties = new Properties()
+if (apikeyPropertiesFile.exists()) {
+    apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
+}
 android {
     namespace 'com.example.myflightloud'
     compileSdk 35
-
     defaultConfig {
         applicationId "com.example.myflightloud"
         minSdk 21
@@ -14,10 +20,15 @@ android {
         versionCode 1
         versionName "1.0"
 
+        buildConfigField "String", "API_KEY", "\"${apikeyProperties['API_KEY']}\""
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary true
         }
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 
     buildTypes {
