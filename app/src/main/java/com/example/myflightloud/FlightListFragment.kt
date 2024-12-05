@@ -7,15 +7,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class FlightListFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: FlightListAdapter
     private val subscribeFlights = mutableListOf<FlightDeal>()
-
+    private var currentBid = 0.0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,6 +32,7 @@ class FlightListFragment : Fragment() {
 
         // get the deals from the flghtdata
         val flightData = arguments?.getParcelable<FlightData>("flight_data")
+
         val flightDeals = flightData?.data?.flightDeals ?: emptyList()
         Log.d("FlightListFragment", "Received flight deals: ${flightDeals.size}")
 
@@ -36,18 +40,21 @@ class FlightListFragment : Fragment() {
         adapter = FlightListAdapter(
             flightDeals,
             onBidChanged = { flightDeal, bid ->
-                // TODO stoee the new bid locally
-                val currentBid = bid
-                showToast("Bid $${currentBid}! for ${flightDeal.key} flight")
+                saveFlight(flightDeal, bid)
+                showToast("Bid $${bid}! for ${flightDeal.key} flight")
             },
             onCheckboxChanged = { flightDeal, isChecked ->
                 if(isChecked) {
-                    subscribeFlights.add(flightDeal)
+                    saveFlight(flightDeal, null)
                     showToast("Subscribed to ${flightDeal.key} flight")
                     Log.d("FlightListFragment", subscribeFlights.toString())
 
                 }else {
-                    subscribeFlights.remove(flightDeal)
+                    val db = AppDatabase.getInstance(requireContext())
+                    val dao = db.subscribedFlightDAO()
+                    lifecycleScope.launch {
+                        dao.deleteAll()
+                    }
                     showToast("Unsubscribed from ${flightDeal.key} flight")
                     Log.d("FlightListFragment", subscribeFlights.toString())
                 }
@@ -55,6 +62,14 @@ class FlightListFragment : Fragment() {
         recyclerView.adapter = adapter
 
         return rootView
+    }
+    private fun saveFlight(flightDeal: FlightDeal, bid: Double?) {
+        val flight = SubscribedFlight(flightKey = flightDeal.key, bid = bid, flightPrice = flightDeal.price.units.toDouble())
+        val db = AppDatabase.getInstance(requireContext())
+        val dao = db.subscribedFlightDAO()
+        lifecycleScope.launch(Dispatchers.IO) {
+            dao.insertAll(flight)
+        }
     }
 
     // Helper function to show a toast message
