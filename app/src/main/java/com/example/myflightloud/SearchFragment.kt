@@ -8,7 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.Toast
+import com.airbnb.lottie.LottieAnimationView
+import com.google.android.material.bottomnavigation.BottomNavigationItemView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -17,15 +21,19 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import okhttp3.logging.HttpLoggingInterceptor
-
 private val TAG = "SearchFragment"
 
 class SearchFragment : Fragment() {
     private  lateinit var FromTextView: EditText
+
     private lateinit var ToTextView: EditText
     private lateinit var WhenTextView: EditText
     private lateinit var searchBtn: Button
+    private lateinit var loadingSpinner: ProgressBar
 
+//    interface OnSearchCompletedListener {
+//        fun onSearchCompleted()
+//    }
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://booking-com15.p.rapidapi.com/api/v1/flights/")
         .addConverterFactory(GsonConverterFactory.create())
@@ -50,6 +58,7 @@ class SearchFragment : Fragment() {
         ToTextView = rootView.findViewById(R.id.To_textView)
         WhenTextView = rootView.findViewById(R.id.when_textView)
         searchBtn = rootView.findViewById(R.id.search_btn)
+        loadingSpinner = rootView.findViewById(R.id.loading_spinner)
 
         //when search btton is pressed set the values
         searchBtn.setOnClickListener{
@@ -68,6 +77,9 @@ class SearchFragment : Fragment() {
 
     }
     private fun fetchFlightData(fromAirport: String, toAirport: String, departureDate: String) {
+        loadingSpinner.visibility = View.VISIBLE
+
+        searchBtn.isEnabled = false
         // Log the API request to check if it is being made
         Log.d(TAG, "API call started for: from $fromAirport to $toAirport on $departureDate")
 
@@ -80,12 +92,26 @@ class SearchFragment : Fragment() {
             cabinClass = "ECONOMY"
         ).enqueue(object : Callback<FlightData> {
             override fun onResponse(call: Call<FlightData>, response: Response<FlightData>) {
+                loadingSpinner.visibility = View.GONE
+
+                searchBtn.isEnabled = true
+
                 if (response.isSuccessful) {
                     Log.d(TAG, "API Response: Success")
                     val flightResponse = response.body()
                     if (flightResponse != null) {
+//                        (activity as? OnSearchCompletedListener)?.onSearchCompleted()
+
                         // Process and display the flight data
                         Log.d(TAG, "Flight Data: ${flightResponse.data}")
+                        //passin the data to flightDeals fragment
+                        val flightListItemId = R.id.menu_list
+                        val bottomNav = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+                        bottomNav!!.selectedItemId = flightListItemId
+                        val flightListFragment = FlightListFragment.newInstance(flightResponse)
+                        replaceFragment(flightListFragment)
+//
+
                     } else {
                         Log.d(TAG, "No flight data found")
                         showToast("No flight data found")
@@ -97,6 +123,9 @@ class SearchFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<FlightData>, t: Throwable) {
+                loadingSpinner.visibility = View.GONE
+
+                searchBtn.isEnabled = true
                 Log.e(TAG, "API Call Failed: ${t.message}")
                 showToast("Error: ${t.message}")
             }
@@ -115,6 +144,8 @@ class SearchFragment : Fragment() {
         transaction.addToBackStack(null)  // Optional, adds this transaction to the back stack so the user can navigate back
         transaction.commit()
     }
+
+
 
     companion object {
         fun newInstance(): SearchFragment {
@@ -144,3 +175,4 @@ private fun getOkHttpClient(): OkHttpClient {
         //.addInterceptor(loggingInterceptor) // Add the interceptor FOR http logging.. reallyy neat stuff
         .build()
 }
+
