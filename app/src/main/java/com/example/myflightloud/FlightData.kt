@@ -15,6 +15,6 @@ data class FlightDeal(
 
 data class Price(
     val currencyCode: String,
-    val unit: Int // This represents the price in the specified currency
+    val units: Int // This represents the price in the specified currency
 )
 

@@ -25,7 +25,7 @@ class FlightListFragment : Fragment() {
     companion object {
 
 
-        fun newInstance(flightList: List<FlightItem>): FlightListFragment {
+        fun newInstance(): FlightListFragment {
             return FlightListFragment()
         }
 
