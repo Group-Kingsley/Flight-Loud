@@ -17,15 +17,18 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import okhttp3.logging.HttpLoggingInterceptor
-
 private val TAG = "SearchFragment"
 
 class SearchFragment : Fragment() {
     private  lateinit var FromTextView: EditText
+
     private lateinit var ToTextView: EditText
     private lateinit var WhenTextView: EditText
     private lateinit var searchBtn: Button
 
+    interface OnSearchCompletedListener {
+        fun onSearchCompleted()
+    }
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://booking-com15.p.rapidapi.com/api/v1/flights/")
         .addConverterFactory(GsonConverterFactory.create())
@@ -84,8 +87,13 @@ class SearchFragment : Fragment() {
                     Log.d(TAG, "API Response: Success")
                     val flightResponse = response.body()
                     if (flightResponse != null) {
+                        (activity as? OnSearchCompletedListener)?.onSearchCompleted()
+
                         // Process and display the flight data
                         Log.d(TAG, "Flight Data: ${flightResponse.data}")
+                        //passin the data to flightDeals fragment
+                        val flightListFragment = FlightListFragment.newInstance(flightResponse)
+                        replaceFragment(flightListFragment)
                     } else {
                         Log.d(TAG, "No flight data found")
                         showToast("No flight data found")

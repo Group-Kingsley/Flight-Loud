@@ -16,8 +16,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.example.myflightloud.ui.theme.MyflightloudTheme
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.tabs.TabLayout
 
 class MainActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -29,6 +31,7 @@ class MainActivity : AppCompatActivity() {
         val fragment3: Fragment = FlightListFragment()
 
         val bottomNavigationItemView: BottomNavigationView = findViewById(R.id.bottomNavigationView)
+
 
         //handle navigation selection
         bottomNavigationItemView.setOnItemSelectedListener { item ->
@@ -53,5 +56,7 @@ class MainActivity : AppCompatActivity() {
 
 
     }
+
+
 }
 
