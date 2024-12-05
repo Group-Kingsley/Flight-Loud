@@ -30,7 +30,6 @@ class FlightListFragment : Fragment() {
 
         // Use safe call and provide a default empty list if data is null
         val flightDeals = flightData?.data?.flightDeals ?: emptyList()
-
         Log.d("FlightListFragment", "Received flight deals: ${flightDeals.size}")
 
         // Set up the adapter with the flight deals list
