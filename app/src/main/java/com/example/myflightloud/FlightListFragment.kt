@@ -15,6 +15,8 @@ class FlightListFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: FlightListAdapter
     private val subscribeFlights = mutableListOf<FlightDeal>()
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -25,27 +27,29 @@ class FlightListFragment : Fragment() {
         recyclerView = rootView.findViewById(R.id.flightlist_recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        // Safely retrieve and process flight data
+        // get the deals from the flghtdata
         val flightData = arguments?.getParcelable<FlightData>("flight_data")
-
-        // Use safe call and provide a default empty list if data is null
         val flightDeals = flightData?.data?.flightDeals ?: emptyList()
         Log.d("FlightListFragment", "Received flight deals: ${flightDeals.size}")
 
         // Set up the adapter with the flight deals list
-        adapter = FlightListAdapter(flightDeals,
+        adapter = FlightListAdapter(
+            flightDeals,
             onBidChanged = { flightDeal, bid ->
                 // TODO stoee the new bid locally
-                showToast("Bid Changed!")
+                val currentBid = bid
+                showToast("Bid $${currentBid}! for ${flightDeal.key} flight")
             },
             onCheckboxChanged = { flightDeal, isChecked ->
                 if(isChecked) {
                     subscribeFlights.add(flightDeal)
-                    showToast("Subscribed to ${flightDeal.key} flight for when price drop")
+                    showToast("Subscribed to ${flightDeal.key} flight")
+                    Log.d("FlightListFragment", subscribeFlights.toString())
 
                 }else {
-                    subscribeFlights.add(flightDeal)
-                    showToast("Unsubscribed from ${flightDeal.key}")
+                    subscribeFlights.remove(flightDeal)
+                    showToast("Unsubscribed from ${flightDeal.key} flight")
+                    Log.d("FlightListFragment", subscribeFlights.toString())
                 }
             })
         recyclerView.adapter = adapter

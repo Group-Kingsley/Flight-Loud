@@ -8,7 +8,6 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myflightloud.R
 
 class FlightListAdapter(private val flightDeals: List<FlightDeal>,
                         private val onBidChanged: (FlightDeal, Double) -> Unit,
