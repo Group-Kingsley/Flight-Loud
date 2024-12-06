@@ -24,15 +24,31 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/fragment_home_recycler_view"
         android:layout_width="373dp"
-        android:layout_height="406dp"
+        android:layout_height="0dp"
         android:layout_marginStart="1dp"
         android:layout_marginEnd="1dp"
-        android:layout_marginBottom="1dp"
+        android:layout_marginBottom="86dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/home_fragment_view"
+        app:layout_constraintTop_toBottomOf="@+id/btnLogout"
         tools:listitem="@layout/item_subscribed_flight" />
+
+    <Button
+        android:id="@+id/btnLogout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="42dp"
+        android:layout_marginBottom="149dp"
+        android:text="Logout"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/black"
+        android:background="@drawable/bg_edittext"
+        app:layout_constraintBottom_toTopOf="@+id/fragment_home_recycler_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.941"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

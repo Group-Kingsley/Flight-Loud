@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-parcelize'
     id("kotlin-kapt")
     id 'org.jetbrains.kotlin.plugin.serialization' version '2.0.21'
+    id 'com.google.gms.google-services'
 }
 
 //api key set up
@@ -18,7 +19,7 @@ android {
     compileSdk 35
     defaultConfig {
         applicationId "com.example.myflightloud"
-        minSdk 21
+        minSdk 23
         targetSdk 34
         versionCode 1
         versionName "1.0"
@@ -61,13 +62,23 @@ android {
 }
 
 dependencies {
+    //firebase BoM integration
+    implementation platform('com.google.firebase:firebase-bom:33.7.0')
+
+    //firebase SDK
+    implementation("com.google.firebase:firebase-auth")
+
+    //Room Database (local database)
     def room_version = "2.4.2"
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
+
+    //fragment
     implementation 'androidx.fragment:fragment-ktx:1.5.0'
 
+    //http client retrofit
     implementation 'com.squareup.okhttp3:logging-interceptor:4.11.0'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
