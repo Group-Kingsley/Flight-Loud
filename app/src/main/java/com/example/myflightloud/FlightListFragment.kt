@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,6 +31,8 @@ class FlightListFragment : Fragment() {
         recyclerView = rootView.findViewById(R.id.flightlist_recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
+
+
         // get the deals from the flghtdata
         val flightData = arguments?.getParcelable<FlightData>("flight_data")
 
@@ -43,10 +46,10 @@ class FlightListFragment : Fragment() {
                 saveFlight(flightDeal, bid)
                 showToast("Bid $${bid}! for ${flightDeal.key} flight")
             },
-            onCheckboxChanged = { flightDeal, isChecked ->
+            onCheckboxChanged = { flightDeal, bid, isChecked ->
                 if(isChecked) {
-                    saveFlight(flightDeal, null)
-                    showToast("Subscribed to ${flightDeal.key} flight")
+                    saveFlight(flightDeal, bid)
+                    showToast("Subscribed to ${flightDeal.key} flight with bid: $${bid}")
                     Log.d("FlightListFragment", subscribeFlights.toString())
 
                 }else {
@@ -64,7 +67,9 @@ class FlightListFragment : Fragment() {
         return rootView
     }
     private fun saveFlight(flightDeal: FlightDeal, bid: Double?) {
-        val flight = SubscribedFlight(flightKey = flightDeal.key, bid = bid, flightPrice = flightDeal.price.units.toDouble())
+        val flight = SubscribedFlight(flightKey = flightDeal.key,
+            bid = bid ?: 0.0,
+            flightPrice = flightDeal.price.units.toDouble())
         val db = AppDatabase.getInstance(requireContext())
         val dao = db.subscribedFlightDAO()
         lifecycleScope.launch(Dispatchers.IO) {

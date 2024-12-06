@@ -13,7 +13,7 @@ import android.view.inputmethod.EditorInfo
 class FlightListAdapter(
     private val flightDeals: List<FlightDeal>,
     private val onBidChanged: (FlightDeal, Double) -> Unit,
-    private val onCheckboxChanged: (FlightDeal, Boolean) -> Unit
+    private val onCheckboxChanged: (FlightDeal, Double, Boolean) -> Unit
 ) : RecyclerView.Adapter<FlightListAdapter.FlightDealViewHolder>() {
 
     class FlightDealViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -31,34 +31,36 @@ class FlightListAdapter(
 
     override fun onBindViewHolder(holder: FlightDealViewHolder, position: Int) {
         val deal = flightDeals[position]
-
+        var bidText: String
+        var bidValue: Double=0.0
         // Populate the details
         holder.detailsTextView.text = deal.key
         holder.priceTextView.text = "${deal.price.units} ${deal.price.currencyCode}"
 
+
         // Handle checkbox changes
         holder.checkBox.setOnCheckedChangeListener(null) // Reset listener to avoid false triggers
         holder.checkBox.isChecked = false // Default unchecked
+        holder.userBidEditText.setText("")
+       holder.userBidEditText.doOnTextChanged{ text, _, _, _ ->
+           bidValue = text?.toString()?.toDouble() ?: 0.0
+       }
         holder.checkBox.setOnCheckedChangeListener { _, isChecked ->
-            onCheckboxChanged(deal, isChecked)
+            if(isChecked) {
+                if(bidValue > 0.0) {
+                    onCheckboxChanged(deal, bidValue, isChecked)
+                }else {
+                    holder.userBidEditText.error = "Please enter a valid bid"
+                    holder.checkBox.isChecked = false
+                }
+            }else {
+                onCheckboxChanged(deal, bidValue, isChecked)
+            }
+
         }
 
-        // Handle bid input
-        holder.userBidEditText.setText("") // Reset the EditText to avoid incorrect data
-        holder.userBidEditText.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                val bidText = holder.userBidEditText.text.toString()
-                val bidValue = bidText.toDoubleOrNull()
-                if (bidValue != null) {
-                    onBidChanged(deal, bidValue)
-                } else {
-                    holder.userBidEditText.error = "Invalid bid value"
-                }
-                true
-            } else {
-                false
-            }
-        }
+
+
     }
 
     override fun getItemCount() = flightDeals.size
