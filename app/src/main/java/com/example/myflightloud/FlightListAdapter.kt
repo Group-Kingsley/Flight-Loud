@@ -31,6 +31,7 @@ class FlightListAdapter(
 
     override fun onBindViewHolder(holder: FlightDealViewHolder, position: Int) {
         val deal = flightDeals[position]
+
         var bidText: String
         var bidValue: Double=0.0
         // Populate the details
