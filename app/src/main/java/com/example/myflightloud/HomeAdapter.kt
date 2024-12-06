@@ -13,6 +13,7 @@ class SubscribedFlightAdapter(
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val flightKeyTextView: TextView = itemView.findViewById(R.id.item_title)
         val bidTextView: TextView = itemView.findViewById(R.id.user_bid)
+        val priceTextView: TextView = itemView.findViewById(R.id.item_price)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -24,7 +25,8 @@ class SubscribedFlightAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val flight = flights[position]
         holder.flightKeyTextView.text = flight.flightKey
-        holder.bidTextView.text = flight.bid?.toString() ?: "No Bid"
+        holder.bidTextView.text = flight.bid.toString()
+        holder.priceTextView.text = flight.flightPrice.toString()
     }
 
     override fun getItemCount(): Int = flights.size
