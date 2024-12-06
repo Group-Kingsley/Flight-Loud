@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "415229494909",
+    "project_id": "flight-loud",
+    "storage_bucket": "flight-loud.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:415229494909:android:a3d6ca3051eea53d6b5314",
+        "android_client_info": {
+          "package_name": "com.example.myflightloud"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdaOfzuzRWBHQjldrifKLQotOqMx3PWkU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

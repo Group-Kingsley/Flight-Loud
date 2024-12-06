@@ -155,6 +155,7 @@ class SearchFragment : Fragment() {
 
 private fun getOkHttpClient(): OkHttpClient {
     val apiKey = BuildConfig.API_KEY
+    Log.d("here isi the api key", apiKey)
     val interceptor = Interceptor { chain ->
         // Add API Key and Host to the request header
         val request = chain.request().newBuilder()

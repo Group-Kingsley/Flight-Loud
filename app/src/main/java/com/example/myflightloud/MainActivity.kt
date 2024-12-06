@@ -1,27 +1,29 @@
 package com.example.myflightloud
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.example.myflightloud.ui.theme.MyflightloudTheme
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.tabs.TabLayout
+import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        FirebaseApp.initializeApp(this)
+        auth = FirebaseAuth.getInstance()
+
+        // Redirect to LoginActivity if the user is not authenticated
+        if (auth.currentUser == null) {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+            return
+        }
+
         setContentView(R.layout.activity_main)
 
         val fragmentManager: FragmentManager = supportFragmentManager
@@ -32,11 +34,10 @@ class MainActivity : AppCompatActivity() {
 
         val bottomNavigationItemView: BottomNavigationView = findViewById(R.id.bottomNavigationView)
 
-
-        //handle navigation selection
+        // Handle navigation selection
         bottomNavigationItemView.setOnItemSelectedListener { item ->
             lateinit var fragment: Fragment
-            when(item.itemId) {
+            when (item.itemId) {
                 R.id.menu_home -> fragment = fragment1
                 R.id.menu_search -> fragment = fragment2
                 R.id.menu_list -> fragment = fragment3
@@ -48,15 +49,9 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-        //default fragment
+        // Default fragment
         fragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment1)
             .commit()
-
-
-
     }
-
-
 }
-
