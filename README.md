@@ -25,8 +25,8 @@ Scope: The scope is feasible with a core version that tracks flight prices and s
 Product Spec
 1. User Features (Required and Optional)
 Required Features
-* Users can login
-* Users can add flights to a track-list.
+-[x] Users can login
+-[x]Users can add flights to a track-list.
 * Users can set up price alerts for specific flight routes and receive notifications when prices drop or rise.
 
 Optional Features
