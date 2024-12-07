@@ -1,11 +1,8 @@
 package com.example.myflightloud
 
-import android.Manifest
-import android.content.pm.PackageManager
-import android.location.Geocoder
-import android.location.Location
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,35 +10,29 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.fragment.app.Fragment
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import com.google.android.material.bottomnavigation.BottomNavigationItemView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.util.Locale
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
-
-private const val TAG = "SearchFragment"
-private const val LOCATION_PERMISSION_REQUEST_CODE = 1
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import okhttp3.logging.HttpLoggingInterceptor
+private val TAG = "SearchFragment"
 
 class SearchFragment : Fragment() {
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var fetchLocationBtn: Button
-    private lateinit var FromTextView: EditText
-    private lateinit var ToTextView: AutoCompleteTextView
+    private  lateinit var FromTextView: EditText
+
+    private lateinit var ToTextView: EditText
     private lateinit var WhenTextView: EditText
     private lateinit var searchBtn: Button
     private lateinit var loadingSpinner: ProgressBar
 
+    //    interface OnSearchCompletedListener {
+//        fun onSearchCompleted()
+//    }
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://booking-com15.p.rapidapi.com/api/v1/flights/")
         .addConverterFactory(GsonConverterFactory.create())
@@ -50,169 +41,137 @@ class SearchFragment : Fragment() {
 
     val apiService = retrofit.create(ApiService::class.java)
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // Inflate the layout for this fragment
         val rootView = inflater.inflate(R.layout.fragment_search, container, false)
-
         FromTextView = rootView.findViewById(R.id.from_textView)
         ToTextView = rootView.findViewById(R.id.To_textView)
         WhenTextView = rootView.findViewById(R.id.when_textView)
         searchBtn = rootView.findViewById(R.id.search_btn)
-        fetchLocationBtn = rootView.findViewById(R.id.fetch_location_btn)
         loadingSpinner = rootView.findViewById(R.id.loading_spinner)
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-
-        fetchLocationBtn.setOnClickListener {
-            getCurrentLocation()
-        }
-
-        setupDestinationAutocomplete()
-
-        searchBtn.setOnClickListener {
+        //when search btton is pressed set the values
+        searchBtn.setOnClickListener{
             val fromAirportValue = FromTextView.text.toString()
             val toAirportValue = ToTextView.text.toString()
             val departureDateValue = WhenTextView.text.toString()
 
-            if (fromAirportValue.isEmpty() || toAirportValue.isEmpty() || departureDateValue.isEmpty()) {
+            //validates required inputs
+            if(fromAirportValue.isEmpty() || toAirportValue.isEmpty() || departureDateValue.isEmpty()) {
                 Toast.makeText(requireContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show()
-            } else {
+            }else {
                 fetchFlightData(fromAirportValue, toAirportValue, departureDateValue)
             }
         }
+        return  rootView
 
-        return rootView
     }
-
-    private fun getCurrentLocation() {
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            // Request location permissions
-            requestPermissions(
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ),
-                LOCATION_PERMISSION_REQUEST_CODE
-            )
-            return
-        }
-
-        // Fetch the user's last known location
-        fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-            if (location != null) {
-                val city = getCityName(location.latitude, location.longitude)
-                FromTextView.setText(city)
-                Log.d(TAG, "Your current city: $city")
-                Toast.makeText(requireContext(), "Detected city: $city", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(requireContext(), "Unable to get location", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-
-
-    private fun getCityName(lat: Double, lon: Double): String {
-        val geocoder = Geocoder(requireContext(), Locale.getDefault())
-        val addresses = geocoder.getFromLocation(lat, lon, 1)
-        if (addresses != null) {
-            return addresses[0]?.locality ?: "Unknown City"
-            } else {
-                return "Unknown City"
-            }
-    }
-
-    private fun setupDestinationAutocomplete() {
-        ToTextView.threshold = 4 // Show suggestions after 4 character
-
-        ToTextView.addTextChangedListener(object : android.text.TextWatcher {
-            override fun afterTextChanged(s: android.text.Editable?) {}
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (!s.isNullOrEmpty()) {
-                    fetchDestinationSuggestions(s.toString())
-                }
-            }
-        })
-    }
-
-    private fun fetchDestinationSuggestions(query: String) {
-        apiService.getDestinationSuggestions(query).enqueue(object : Callback<List<DestinationSuggestion>> {
-            override fun onResponse(
-                call: Call<List<DestinationSuggestion>>,
-                response: Response<List<DestinationSuggestion>>
-            ) {
-                if (response.isSuccessful && response.body() != null) {
-                    val suggestions = response.body()!!.map { it.name }
-                    val adapter = ArrayAdapter(
-                        requireContext(),
-                        android.R.layout.simple_dropdown_item_1line,
-                        suggestions
-                    )
-                    ToTextView.setAdapter(adapter)
-                } else {
-                    Log.e(TAG, "Failed to fetch destination suggestions: ${response.message()}")
-                }
-            }
-
-            override fun onFailure(call: Call<List<DestinationSuggestion>>, t: Throwable) {
-                Log.e(TAG, "Error fetching destination suggestions: ${t.message}")
-            }
-        })
-    }
-
-
     private fun fetchFlightData(fromAirport: String, toAirport: String, departureDate: String) {
-        // Implement flight data fetching logic as described earlier
-    }
+        loadingSpinner.visibility = View.VISIBLE
 
-    private fun getOkHttpClient(): OkHttpClient {
-        val apiKey = BuildConfig.API_KEY
-        val interceptor = Interceptor { chain ->
-            val request = chain.request().newBuilder()
-                .addHeader("X-RapidAPI-Key", apiKey)
-                .addHeader("X-RapidAPI-Host", "booking-com15.p.rapidapi.com")
-                .build()
-            chain.proceed(request)
-        }
-        val loggingInterceptor = HttpLoggingInterceptor()
-        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+        searchBtn.isEnabled = false
+        // Log the API request to check if it is being made
+        Log.d(TAG, "API call started for: from $fromAirport to $toAirport on $departureDate")
 
-        return OkHttpClient.Builder()
-            .addInterceptor(interceptor)
-            .build()
-    }
+        apiService.getFlightData(
+            fromId = fromAirport,
+            toId = toAirport,
+            departDate = departureDate,
+            pageNo = 1,
+            adults = 1,
+            cabinClass = "ECONOMY"
+        ).enqueue(object : Callback<FlightData> {
+            override fun onResponse(call: Call<FlightData>, response: Response<FlightData>) {
+                loadingSpinner.visibility = View.GONE
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission granted, fetch location
-                getCurrentLocation()
-            } else {
-                // Permission denied
-                Toast.makeText(
-                    requireContext(),
-                    "Permission denied. Unable to access location.",
-                    Toast.LENGTH_SHORT
-                ).show()
+                searchBtn.isEnabled = true
+
+                if (response.isSuccessful) {
+                    Log.d(TAG, "API Response: Success")
+                    val flightResponse = response.body()
+                    if (flightResponse != null) {
+//                        (activity as? OnSearchCompletedListener)?.onSearchCompleted()
+
+                        // Process and display the flight data
+                        Log.d(TAG, "Flight Data: ${flightResponse.data}")
+                        //passin the data to flightDeals fragment
+                        val flightListItemId = R.id.menu_list
+                        val bottomNav = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+                        bottomNav!!.selectedItemId = flightListItemId
+                        val flightListFragment = FlightListFragment.newInstance(flightResponse)
+                        replaceFragment(flightListFragment)
+//
+
+                    } else {
+                        Log.d(TAG, "No flight data found")
+                        showToast("No flight data found")
+                    }
+                } else {
+                    Log.e(TAG, "API Response Error: ${response.message()}")
+                    showToast("Failed to load data: ${response.message()}")
+                }
             }
-        }
+
+            override fun onFailure(call: Call<FlightData>, t: Throwable) {
+                loadingSpinner.visibility = View.GONE
+
+                searchBtn.isEnabled = true
+                Log.e(TAG, "API Call Failed: ${t.message}")
+                showToast("Error: ${t.message}")
+            }
+        })
     }
 
+    // Method to show a toast message
+    private fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    // Helper function to replace current fragment with the new one
+    private fun replaceFragment(fragment: Fragment) {
+        val transaction = parentFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragment_container, fragment)
+        transaction.addToBackStack(null)  // Optional, adds this transaction to the back stack so the user can navigate back
+        transaction.commit()
+    }
+
+
+
+    companion object {
+        fun newInstance(): SearchFragment {
+            return SearchFragment()
+        }
+    }
+}
+
+private fun getOkHttpClient(): OkHttpClient {
+    val apiKey = BuildConfig.API_KEY
+    Log.d("here isi the api key", apiKey)
+    val interceptor = Interceptor { chain ->
+        // Add API Key and Host to the request header
+        val request = chain.request().newBuilder()
+            .addHeader("X-RapidAPI-Key", apiKey) // Add your API Key here
+            .addHeader("X-RapidAPI-Host", "booking-com15.p.rapidapi.com")
+            .build()
+
+        chain.proceed(request) // Proceed with the request
+    }
+
+    val loggingInterceptor = HttpLoggingInterceptor()
+    loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+
+
+    return OkHttpClient.Builder()
+        .addInterceptor(interceptor)
+        //.addInterceptor(loggingInterceptor) // Add the interceptor FOR http logging.. reallyy neat stuff
+        .build()
 }
