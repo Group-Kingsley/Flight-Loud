@@ -1,6 +1,7 @@
 package com.example.myflightloud
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -16,4 +17,7 @@ interface SubscribedFlightsDao {
 
     @Query("DELETE FROM subscribed_flights ")
     fun deleteAll()
+
+    @Delete
+    fun delete(flight: SubscribedFlight)
 }

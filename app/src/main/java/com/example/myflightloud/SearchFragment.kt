@@ -30,7 +30,7 @@ class SearchFragment : Fragment() {
     private lateinit var searchBtn: Button
     private lateinit var loadingSpinner: ProgressBar
 
-//    interface OnSearchCompletedListener {
+    //    interface OnSearchCompletedListener {
 //        fun onSearchCompleted()
 //    }
     private val retrofit = Retrofit.Builder()
@@ -175,4 +175,3 @@ private fun getOkHttpClient(): OkHttpClient {
         //.addInterceptor(loggingInterceptor) // Add the interceptor FOR http logging.. reallyy neat stuff
         .build()
 }
-

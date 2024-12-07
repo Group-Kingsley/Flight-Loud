@@ -8,7 +8,6 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.RecyclerView
-import android.view.inputmethod.EditorInfo
 
 class FlightListAdapter(
     private val flightDeals: List<FlightDeal>,
@@ -65,4 +64,5 @@ class FlightListAdapter(
     }
 
     override fun getItemCount() = flightDeals.size
+
 }

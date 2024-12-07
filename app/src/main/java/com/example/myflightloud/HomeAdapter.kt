@@ -36,4 +36,9 @@ class SubscribedFlightAdapter(
         flights.addAll(newFlights)
         notifyDataSetChanged()
     }
+    fun removeItem(position: Int): SubscribedFlight {
+        val flight = flights.removeAt(position)
+        notifyItemRemoved(position)
+        return flight
+    }
 }
