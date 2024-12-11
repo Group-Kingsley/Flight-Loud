@@ -101,3 +101,14 @@ List the issues you completed this sprint
 ![Kapture 2024-12-10 at 22 43 19](https://github.com/user-attachments/assets/958c9c20-84b2-4872-b714-ce06a0c5b36c)
 
 
+Milestone 3 - Build Sprint 2 (Unit 9)
+GitHub Project board
+
+
+Completed user stories
+List the completed user stories from this unit
+List any pending user stories / any user stories you decided to cut from the original requirements
+[Add video/gif of your current application that shows build progress] 
+
+
+
