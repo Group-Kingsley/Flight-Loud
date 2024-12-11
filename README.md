@@ -125,6 +125,7 @@ GIF OF PROGRESS :}
 ![Kapture 2024-12-10 at 22 54 51](https://github.com/user-attachments/assets/ebdcc77a-e312-4f31-82f1-03559bd70464)
 
 
-
-
+App Demo Video
+Embed the YouTube/Vimeo link of your Completed Demo Day prep video
+https://youtu.be/A4XStIXTxh4
 
