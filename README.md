@@ -98,5 +98,6 @@ List the issues you completed this sprint
 - completed room database for storing data gotten from search API such that user's can see the list they created successfully
 
 
+![Kapture 2024-12-10 at 22 43 19](https://github.com/user-attachments/assets/958c9c20-84b2-4872-b714-ce06a0c5b36c)
 
 
