@@ -84,8 +84,8 @@ GitHub Project board
 
 
 Issue cards
+<img width="1261" alt="image" src="https://github.com/user-attachments/assets/6459408a-afe9-489a-8170-afc6a69507d9">
 
-[Add screenshot of your Project Board with the issues that you're working on in the NEXT sprint. It should include issues for next unit with assigned owners.] 
 Issues worked on this sprint
 - implementing the Login using Firebase auth
 - implemented the Search Api from rapidAPI to get the flight data
@@ -96,6 +96,7 @@ List the issues you completed this sprint
 - completed Search Api and Search fragment successfully
 - completed FlightList recyclerview and fragment successfully
 - completed room database for storing data gotten from search API such that user's can see the list they created successfully
-[Add giphy that shows current build progress for Milestone 2. Note: We will be looking for progression of work between Milestone 2 and 3. Make sure your giphys are not duplicated and clearly show the change from Sprint 1 to 2.]
+
+
 
 
