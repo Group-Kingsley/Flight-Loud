@@ -77,11 +77,25 @@ https://github.com/MattToegel/CS388/blob/Unit7/Unit7/project-requirements.md
 
 Milestone 2 - Build Sprint 1 (Unit 8)
 GitHub Project board
-[Add screenshot of your Project Board with three milestones visible in this section] 
+<img width="1158" alt="image" src="https://github.com/user-attachments/assets/d20c6002-b43c-4a2c-a3f8-2599237e16af">
+
+![image](https://github.com/user-attachments/assets/6e4aa48d-ad4d-41f8-9d64-b72b6fa41bcb)
+
+
 
 Issue cards
-[Add screenshot of your Project Board with the issues that you've been working on for this unit's milestone] 
+
 [Add screenshot of your Project Board with the issues that you're working on in the NEXT sprint. It should include issues for next unit with assigned owners.] 
 Issues worked on this sprint
+- implementing the Login using Firebase auth
+- implemented the Search Api from rapidAPI to get the flight data
+- implemented home and flight list fragments
+- implemented room database
 List the issues you completed this sprint
+- completed Login successfully
+- completed Search Api and Search fragment successfully
+- completed FlightList recyclerview and fragment successfully
+- completed room database for storing data gotten from search API such that user's can see the list they created successfully
 [Add giphy that shows current build progress for Milestone 2. Note: We will be looking for progression of work between Milestone 2 and 3. Make sure your giphys are not duplicated and clearly show the change from Sprint 1 to 2.]
+
+
