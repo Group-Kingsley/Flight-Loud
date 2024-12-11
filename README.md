@@ -103,12 +103,28 @@ List the issues you completed this sprint
 
 Milestone 3 - Build Sprint 2 (Unit 9)
 GitHub Project board
+<img width="1128" alt="image" src="https://github.com/user-attachments/assets/ba7e64bb-2cdc-477b-8f4c-2682c1a64fd5">
 
 
 Completed user stories
+* Users can login [DONE]
+
+* Users can add flights to a track-list. [DONE]
+ 
 List the completed user stories from this unit
+* Users can login [DONE]
+
+* Users can add flights to a track-list. [DONE]
+
+
+  
 List any pending user stories / any user stories you decided to cut from the original requirements
-[Add video/gif of your current application that shows build progress] 
+* Users can set up price alerts for specific flight routes and receive notifications when prices drop or rise. [PENDING]
+
+GIF OF PROGRESS :}
+![Kapture 2024-12-10 at 22 54 51](https://github.com/user-attachments/assets/ebdcc77a-e312-4f31-82f1-03559bd70464)
+
+
 
 
 
